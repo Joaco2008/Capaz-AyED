@@ -68,10 +68,8 @@ git clone https://github.com/usuario/Capaz-AyED.git
 Ejecutar el archivo principal:
 python main.py
 
-Integrantes del Equipo (Grupo N° 10)
+Integrantes del Equipo
 Basso, Francesco Atilio
 Franchetti, Benjamin Santino
 González, Alejo Gael
 Oga Gomez, Fernando Joaquin
-
-Quintans Callejas, Lucio Agustín
