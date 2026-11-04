@@ -1,0 +1,3 @@
+id_funcion;dato_obra(nombre);hora_inicio;hora_fin;fecha;dato_sala(nro);cant_disponibles;precio;estado
+1;El principito;16:00;18:00;18/11/26;2;4;1000;Expirado
+2;Hansel y Greter;16:00;18:00;18/11/26;2;4;1000;Programado
