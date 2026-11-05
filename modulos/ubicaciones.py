@@ -1,50 +1,31 @@
+import modulos.buscar_secuencial as b_secuencial
 def mostrarubicaciones(nro_funcion):
-    arch_fun = open("data/funciones.csv", "r")
-    r_fun = arch_fun.readline().split(";")
-    encontrado_fun = False
-    nro_sala = 0
-    estado = ""
-    # Buscar la funcion
-    while r_fun != [''] and not(encontrado_fun):
-        if r_fun[0] == nro_funcion:
-            print(f"Funcion encontrada, obra: {r_fun[1]}")
-            encontrado_fun = True
-            nro_sala = r_fun[5]
-            estado = r_fun[8]
-        r_fun = arch_fun.readline().split(";")
-    if not(encontrado_fun):
-        print("No existe esta funcion")
+    datos_funcion = b_secuencial.busqueda_por_id(nro_funcion, "data/funciones.csv")
+    if datos_funcion == "No existe este dato":
+        return datos_funcion
     # Si la funcion es encontrada
     else:
-        if estado == "Programado" or estado == "Reprogramado":
-            arch_salas = open("data/salas.csv","r")
-            r_salas = arch_salas.readline()
-            encontrado_sala = False
-            c_platea = 0
-            f_platea = 0
-            c_palco = 0
-            f_palco = 0
-            # Buscamos Sala
-            while r_salas != [''] and not(encontrado_sala):
-                if r_salas[2] == nro_sala:
-                    print(f"Sala encontrada, capacidad: {r_salas[1]}")
-                    encontrado_sala = True
-                    f_platea = int(r_salas[4])
-                    c_platea = int(r_salas[5])
-                    f_palco = int(r_salas[6])
-                    c_palco = int(r_salas[7])
-                r_salas = arch_salas.readline().split(";")
-            if not(encontrado_sala):
-                print("No existe esta sala")
+        estado_funcion = datos_funcion[8]
+        print(estado_funcion)
+        nro_sala = datos_funcion[5]
+        print(nro_sala)
+        if estado_funcion.startswith("Programado"):
+            datos_sala = b_secuencial.busqueda_por_id(nro_sala,"data/salas.csv")
+            if datos_sala == "No existe este dato":
+                return "No existe esta sala"
             else:
+                f_platea = int(datos_sala[4])
+                c_platea = int(datos_sala[5])
+                f_palco = int(datos_sala[6])
+                c_palco = int(datos_sala[7])
                 #proceso de busquedas de butacas
-                arch_ubis = open("data/ubicaciones.csv","r+")
+                arch_ubis = open("data/ubicaciones_funcion.csv","r+")
                 r_ubis = arch_ubis.readline().split(";")
                 lista_plateas = []
                 lista_palcos = []
                 # Almacenamos los codigos identificadores en 2 listas (plateas y palcos)
                 while r_ubis != ['']:
-                    if r_ubis[1] == nro_sala:
+                    if r_ubis[-1].strip("\n") == datos_funcion[0]:
                         if r_ubis[3] == "platea":
                             if len(r_ubis[2]) == 1: 
                                 lista_plateas.append(["00"+r_ubis[2],r_ubis[4]])
@@ -61,6 +42,7 @@ def mostrarubicaciones(nro_funcion):
                                 lista_palcos.append([r_ubis[2],r_ubis[4]])
                     r_ubis = arch_ubis.readline().split(";")
                 # Generamos las matrices
+                print(len(lista_plateas))
                 platea = [[""]*c_platea for _ in range(f_platea)]
                 palco = [[""]*c_palco for _ in range(f_palco)]
                 print("Ubicaciones Platea")
@@ -100,6 +82,7 @@ def mostrarubicaciones(nro_funcion):
                             print("Ubicacion ocupada, porfavor seleccione otro")
                         else:
                             print(f"Ubicacion {lista_plateas[cod_ubi-1][0]} seleccionada")                            
+                            lista_plateas[cod_ubi-1][1] = "ocupado\n"
                             for i in range(len(platea_entradas)):
                                 if platea_entradas[i] > cod_ubi:
                                     posicion_lista_entradas = i
@@ -121,6 +104,7 @@ def mostrarubicaciones(nro_funcion):
                             print("Ubicacion ocupada, porfavor seleccione otro")
                         else:
                             print(f"Ubicacion {lista_palcos[cod_ubi-1][0]} seleccionada")
+                            lista_palcos[cod_ubi-1][1] = "ocupado\n"
                             for i in range(len(palco_entradas)):
                                 if palco_entradas[i] > cod_ubi:
                                     posicion_lista_entradas = i
@@ -144,6 +128,6 @@ def mostrarubicaciones(nro_funcion):
                 #     r_ubis = arch_ubis.readline().split(";")
                     
         else:
-            print("Esta funcion ya ha expirado")
-    return f"Platea: {len(platea_entradas)} y Palco: {len(palco_entradas)}"
+            return"Esta funcion ya ha expirado"
+    return f"Platea: {platea_entradas} y Palco: {palco_entradas}"
     
