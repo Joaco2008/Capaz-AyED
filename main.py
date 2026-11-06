@@ -2,6 +2,7 @@
 # Integrantes: Basso Francesco, Franchetti Benjamin, Gonzalez Gael y Oga Gomez Fernando Joaquin
 
 import modulos.ubicaciones as ubi
+import modulos.ventas as vtas
 
 print("¡¡Bienvenido al Teatro Capaz!!")
 print("Porfavor seleccione una de las opciones:")
@@ -14,6 +15,8 @@ while op != 0:
         print("Ubicaciones")
         id_funcion = input("Ingrese el numero de la funcion: ") 
         print(ubi.mostrarubicaciones(id_funcion))
+    elif op == 3:
+        vtas.gestionar_venta_entradas()
     else:
         print("Opcion no valida")
     print("Porfavor seleccione una de las opciones:")
