@@ -1,1 +1,1 @@
-id_entrada;fecha;dato_funcion(nro);cantidad_entrada;dato_ubicacion(nros);dato_promocion(codigo);subtotal;total
+id_entrada;dato_funcion(nro);dato_ubicacion(nros);cant_entradas_platea;cant_entradas_palco;descuento;total

@@ -41,5 +41,3 @@ def burbuja(vector, forma):
                     vector[e] = vector[e+1]
                     vector[e+1] = aux
     return vector
-lista = [1,123,1241,4512,5125,23523,11111,1,3,6,5,8,6,2]
-print(burbuja(lista,False))
