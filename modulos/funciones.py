@@ -1,6 +1,6 @@
 import os
 import modulos.buscar_secuencial as buscar
-#import modulos.ordenamiento as ordenar
+import modulos.ordenamiento as ordenar
 #def para cargar funciones 
 def cargar_fun(obra,hora_inicio,hora_fin,fecha,id_sala,precio):
     arch = open("data/funciones.csv","r+")
@@ -19,6 +19,7 @@ def cargar_fun(obra,hora_inicio,hora_fin,fecha,id_sala,precio):
         registros_plantilla = plantilla.readline()
     plantilla.close()
     ruta_fun.close()
+
 #def para consultar funciones
 def consultar_funciones():
     #abrimos el archivo de funciones y leemos todas las lineas
@@ -54,6 +55,8 @@ def menu_funciones():
         elif eleccion == 1: #si el usuario desea consultar las funciones, le mostramos un listado de las funciones disponibles
             print("Listado de funciones: ")
             consultar_funciones()
+            
+            
         elif eleccion == 2:
             print("Agregar funcion: ")
             print("Ingrese los datos de la funcion: ")
@@ -65,6 +68,8 @@ def menu_funciones():
             precio = input("Ingrese el precio de la entrada: ")
             cargar_fun(nombre,hora_inicio,hora_fin,fecha,id_sala,precio)
             print("Funcion agregada correctamente")
+            
+            
         elif eleccion == 3:
             print("Seleccione: \n 1- Buscar por ID\n 2- Buscar por nombre de obra")
             eleccion2 = int(input())
@@ -77,15 +82,17 @@ def menu_funciones():
                     print(f"ID: {resultado[0]} | Obra: {resultado[1]} | Hora de inicio: {resultado[2]} | Hora de fin: {resultado[3]} | Fecha: {resultado[4]} | ID sala: {resultado[5]} | Precio: {resultado[6]} | Estado: {resultado[7]}")
                 else:
                     print("No existe ninguna funcion con ese ID")
-            #elif eleccion2 == 2:
-                #nombre_buscar = input("Ingrese el nombre de la obra: ")
+            elif eleccion2 == 2:
                 #llamamos a la funcion de busqueda secuencial
                 
-        """elif eleccion == 4:
+                
+        elif eleccion == 4:
             print("Seleccione: \n 1- Ordenar por ID\n 2- Ordenar por nombre de obra")
             eleccion3 = int(input())
             if eleccion3 == 1:
                 #llamamos a la funcion de ordenamiento por ID
+                ordenar.ordenar_funciones_por_id()
             elif eleccion3 == 2:
-                #llamamos a la funcion de ordenamiento por nombre de obra"""
+                #llamamos a la funcion de ordenamiento por nombre de obra
+                ordenar.ordenar_funciones_por_nombre()
         eleccion = int(input("Seleccione que desea hacer: \n 1- Consultar funciones\n 2- Agregar funciones\n 3- Buscar\n 4- Ordenar funciones\n  0 - Volver al menu principal"))
