@@ -63,8 +63,8 @@ def calcular_importe(cant_entradas_platea,cant_entradas_palco, precio_base, es_s
     else:
         descuento = 0
     total = subtotal - descuento
-    return total, descuento
-
+    # Redondea a 2 digitos fraccionarios el precio y descuento final
+    return round(total,2), round(descuento,2)
 def gestionar_venta_entradas():
     """
     Orquestador principal del proceso de ventas. 
@@ -130,14 +130,17 @@ def actualizar_estado_archivo(codigo_funcion, asientos):
             # Verificación de que existen elementos en la lista para evitar IndexError con líneas vacías
             if linea[2] == "platea":    
                 butaca = str(linea[1])
-                if butaca in asientos[0]:
-                    linea[3] = "ocupado\n"
-                    lineas[i] = ";".join(linea)
+                # Recorre los asientos 
+                for e in range(len(asientos[0])):
+                    if butaca == asientos[1][e]:
+                        linea[3] = "ocupado\n"
+                        lineas[i] = ";".join(linea)
             elif linea[2] == "palco":
                 butaca = str(linea[1])
-                if butaca in asientos[1]:
-                    linea[3] = "ocupado\n"
-                    lineas[i] = ";".join(linea)
+                for e in range(len(asientos[1])):
+                    if butaca == asientos[1][e]:
+                        linea[3] = "ocupado\n"
+                        lineas[i] = ";".join(linea)
     with open(f"funcion {codigo_funcion}/ubicaciones.csv", "w", encoding="utf-8") as archivo:
         archivo.writelines(lineas)
 def registrar_venta_archivo(numero_venta, codigo_funcion, ubis_platea,ubis_palcos, cant_entradas_platea, cant_entradas_palco, descuento, total):
@@ -149,5 +152,5 @@ def registrar_venta_archivo(numero_venta, codigo_funcion, ubis_platea,ubis_palco
             archivo.write(f"{numero_venta};{codigo_funcion};{ubis_platea};{ubis_palcos};{cant_entradas_platea};{cant_entradas_palco};{descuento};{total}\n")
     else:
         with open(f"funcion {codigo_funcion}/ventas.csv", "w", encoding="utf-8") as archivo:
-            archivo.write("id_entrada;dato_funcion(nro);dato_ubicacion(nros);cant_entradas_platea;cant_entradas_palco;descuento;total\n")           
+            archivo.write("id_entrada;dato_funcion(nro);plateas_seleccionadas;palcos_seleccionados;cant_entradas_platea;cant_entradas_palco;descuento;total\n")           
             archivo.write(f"{numero_venta};{codigo_funcion};{ubis_platea};{ubis_palcos};{cant_entradas_platea};{cant_entradas_palco};{descuento};{total}\n")        

@@ -21,7 +21,11 @@ def cargar_fun(obra,hora_inicio,hora_fin,fecha,id_sala,precio):
     arch = open("data/funciones.csv","r+")
     registro = arch.readlines()
     ultimo_registro = registro[-1].split(";")
-    id = str(int(ultimo_registro[0]) + 1)
+    # Si nunca hubieron funciones previamente grabadas
+    try:
+        id = str(int(ultimo_registro[0]) + 1)
+    except ValueError:
+        id = "1"
     registro_resultante = ";".join([id,obra,hora_inicio,hora_fin,fecha,id_sala,precio,"Programado\n"])
     arch.writelines(registro_resultante)
     arch.close()
@@ -102,9 +106,18 @@ def menu_funciones():
                     print(f"ID: {resultado[0]} | Obra: {resultado[1]} | Hora de inicio: {resultado[2]} | Hora de fin: {resultado[3]} | Fecha: {resultado[4]} | ID sala: {resultado[5]} | Precio: {resultado[6]} | Estado: {resultado[7]}")
                 else:
                     print("No existe ninguna funcion con ese ID")
-            # elif eleccion2 == 2:
-            #     #llamamos a la funcion de busqueda secuencial
-                
+            elif eleccion2 == 2:
+                #llamamos a la funcion de busqueda secuencial
+                nombre_buscar = input("Ingrese el nombre o parte del nombre de la obra: ")
+                resultados = buscar.buscar_funciones_por_nombre(nombre_buscar)
+            
+                if len(resultados) > 0:
+                    print(f"\nSe encontraron {len(resultados)} función(es) que coinciden con '{nombre_buscar}':")
+                    for f in resultados:
+                        print(f"ID: {f[0]:<4} | Obra: {f[1]:<20} | Horario: {f[2]} - {f[3]} | Fecha: {f[4]} | Sala: {f[5]} | Precio: ${f[6]} | Estado: {f[7].strip()}")
+            else:
+                print(f"\nNo se encontraron funciones que contengan '{nombre_buscar}'.")    
+            
         elif eleccion == 4:
             print("Seleccione: \n 1- Ordenar por ID\n 2- Ordenar por nombre de obra")
             eleccion3 = int(input())
