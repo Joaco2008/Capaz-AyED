@@ -12,8 +12,7 @@ def generar_matriz_estado(codigo_funcion, sector):
     if sector == "platea":
         matriz=[[0]*10 for i in range(35)]
     elif sector == "palco":
-        matriz=[[0]*10 for i in range(25)]
-        
+        matriz=[[0]*10 for i in range(25)]    
     archivo_ubicaciones.readline()
     linea = archivo_ubicaciones.readline().split(";")
     
