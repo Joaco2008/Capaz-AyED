@@ -10,6 +10,7 @@ op = int(input())
 while op != 0:
     if op == 1:
         print("Gestionar funciones")
+        fun.menu_funciones()
     elif op == 2:
         print("Ubicaciones")
         id_funcion = input("Ingrese el numero de la funcion: ") 
