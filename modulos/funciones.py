@@ -83,8 +83,16 @@ def menu_funciones():
                 else:
                     print("No existe ninguna funcion con ese ID")
             elif eleccion2 == 2:
-                #llamamos a la funcion de busqueda secuencial
-                
+                #llamamos a la funcion de busqueda por nombre de obra
+                nombre_buscar = input("Ingrese el nombre o parte del nombre de la obra: ")
+                resultados = buscar.busqueda_por_nombre(nombre_buscar, "data/funciones.csv")
+            
+                if len(resultados) > 0:
+                    print(f"\nSe encontraron {len(resultados)} función(es) que coinciden con '{nombre_buscar}':")
+                    for f in resultados:
+                        print(f"ID: {f[0]:<4} | Obra: {f[1]:<20} | Horario: {f[2]} - {f[3]} | Fecha: {f[4]} | Sala: {f[5]} | Precio: ${f[6]} | Estado: {f[7].strip()}")
+            else:
+                print(f"\nNo se encontraron funciones que contengan '{nombre_buscar}'.")
                 
         elif eleccion == 4:
             print("Seleccione: \n 1- Ordenar por ID\n 2- Ordenar por nombre de obra")
@@ -93,6 +101,6 @@ def menu_funciones():
                 #llamamos a la funcion de ordenamiento por ID
                 ordenar.ordenar_funciones_por_id()
             elif eleccion3 == 2:
-                #llamamos a la funcion de ordenamiento por nombre de obra
+                #llamamos a la funcion de ordenamiento por nombre de obra 
                 ordenar.ordenar_funciones_por_nombre()
         eleccion = int(input("Seleccione que desea hacer: \n 1- Consultar funciones\n 2- Agregar funciones\n 3- Buscar\n 4- Ordenar funciones\n  0 - Volver al menu principal"))
