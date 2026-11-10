@@ -1,4 +1,4 @@
-id_sala;capacidad;nro_sala;estado_habilitacion;filas_platea;columnas_platea;filas_palco;columnas_palco
+id_sala;capacidad;nro_sala;estado_habilitacion
 1;600;1;habilitada
 2;600;2;habilitada
 3;600;3;habilitada

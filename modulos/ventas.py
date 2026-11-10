@@ -92,8 +92,8 @@ def gestionar_venta_entradas():
             ubis_platea = texto_platea.strip()
             ubis_palco = texto_palco.strip()
             # Buscando el ultimo indice de compra - Para autoincrementar
-            if os.path.exists(f"funcion {codigo_funcion}/ventas.csv"):
-                arch = open(f"funcion {codigo_funcion}/ventas.csv","r+")
+            if os.path.exists(f"data/funcion {codigo_funcion}/ventas.csv"):
+                arch = open(f"data/funcion {codigo_funcion}/ventas.csv","r+")
                 registro = arch.readlines()
                 ultimo_registro = registro[-1].split(";")
                 id = str(int(ultimo_registro[0]) + 1)
@@ -112,7 +112,7 @@ def actualizar_estado_archivo(codigo_funcion, platea_entradas,enlaces_platea,ini
     RF3 Regla 7: Actualizar la disponibilidad solamente cuando la venta haya sido validada.
     """
     # Se guarda el archivo en memoria para modificar la línea exacta y reescribirlo
-    with open(f"funcion {codigo_funcion}/ubicaciones.csv", "r", encoding="utf-8") as archivo:
+    with open(f"data/funcion {codigo_funcion}/ubicaciones.csv", "r", encoding="utf-8") as archivo:
         lineas = archivo.readlines()
         for i in range(len(lineas)):
             linea = lineas[i].split(";")
@@ -140,16 +140,16 @@ def actualizar_estado_archivo(codigo_funcion, platea_entradas,enlaces_platea,ini
                         if butaca == palco_entradas[enlaces_palco[e-1]]:
                             linea[3] = "ocupado\n"
                             lineas[i] = ";".join(linea)
-    with open(f"funcion {codigo_funcion}/ubicaciones.csv", "w", encoding="utf-8") as archivo:
+    with open(f"data/funcion {codigo_funcion}/ubicaciones.csv", "w", encoding="utf-8") as archivo:
         archivo.writelines(lineas)
 def registrar_venta_archivo(numero_venta, codigo_funcion, ubis_platea,ubis_palcos, cant_entradas_platea, cant_entradas_palco, descuento, total):
     """
     RF3 Regla 8: Registrar la operación en un archivo persistente (modo append).
     """
-    if os.path.exists(f"funcion {codigo_funcion}/ventas.csv"):
-        with open(f"funcion {codigo_funcion}/ventas.csv", "a", encoding="utf-8") as archivo:
+    if os.path.exists(f"data/funcion {codigo_funcion}/ventas.csv"):
+        with open(f"data/funcion {codigo_funcion}/ventas.csv", "a", encoding="utf-8") as archivo:
             archivo.write(f"{numero_venta};{codigo_funcion};{ubis_platea};{ubis_palcos};{cant_entradas_platea};{cant_entradas_palco};{descuento};{total}\n")
     else:
-        with open(f"funcion {codigo_funcion}/ventas.csv", "w", encoding="utf-8") as archivo:
+        with open(f"data/funcion {codigo_funcion}/ventas.csv", "w", encoding="utf-8") as archivo:
             archivo.write("id_entrada;dato_funcion(nro);plateas_seleccionadas;palcos_seleccionados;cant_entradas_platea;cant_entradas_palco;descuento;total\n")           
             archivo.write(f"{numero_venta};{codigo_funcion};{ubis_platea};{ubis_palcos};{cant_entradas_platea};{cant_entradas_palco};{descuento};{total}\n")        

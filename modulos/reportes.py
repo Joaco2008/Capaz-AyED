@@ -11,8 +11,8 @@ def obtener_cantidad_entradas_vendidas(codigo_funcion):
     if verificador == "No existe este dato":
         return "No existe esta funcion"
     else:        
-        if os.path.exists(f"funcion {codigo_funcion}/ventas.csv"):
-            with open(f"funcion {codigo_funcion}/ventas.csv", "r", encoding="utf-8") as archivo:
+        if os.path.exists(f"data/funcion {codigo_funcion}/ventas.csv"):
+            with open(f"data/funcion {codigo_funcion}/ventas.csv", "r", encoding="utf-8") as archivo:
                 lineas = archivo.readlines()
             for i in range(1,len(lineas)):
                 linea = lineas[i].split(";")
@@ -28,8 +28,8 @@ def obtener_cantidad_entradas_vendidas(codigo_funcion):
     #cantidad de ventas - capacidad de sala de una sola funcion, devolver la cantidad de ubicaciones disponibles para esa funcion#
 def obtener_ubicaciones_disponibles(codigo_funcion):
     contador_disponibles = 0
-    if os.path.exists(f"funcion {codigo_funcion}/ubicaciones.csv"):
-            with open(f"funcion {codigo_funcion}/ubicaciones.csv", "r", encoding="utf-8") as archivo:
+    if os.path.exists(f"data/funcion {codigo_funcion}/ubicaciones.csv"):
+            with open(f"data/funcion {codigo_funcion}/ubicaciones.csv", "r", encoding="utf-8") as archivo:
                 lineas = archivo.readlines()
                 for i in range(1, len(lineas)):
                     datos = lineas[i].strip().split(";")
@@ -41,8 +41,6 @@ def obtener_ubicaciones_disponibles(codigo_funcion):
         return "No existe esta funcion"
     return contador_disponibles
 
-
-
 #3-recaudacion total de una funcion#
     #sumar el total de venta de entradas de una solafuncion y devolver la recaudacion total de esa funcion#
 def obtener_recaudacion_funcion(codigo_funcion):
@@ -53,8 +51,8 @@ def obtener_recaudacion_funcion(codigo_funcion):
         return "No existe esta funcion"
     else:    
         recaudacion_funcion = 0
-        if os.path.exists(f"funcion {codigo_funcion}/ventas.csv"):
-            with open(f"funcion {codigo_funcion}/ventas.csv", "r", encoding="utf-8") as archivo:
+        if os.path.exists(f"data/funcion {codigo_funcion}/ventas.csv"):
+            with open(f"data/funcion {codigo_funcion}/ventas.csv", "r", encoding="utf-8") as archivo:
                 lineas = archivo.readlines()
                 for i in range(1, len(lineas)):
                     datos = lineas[i].strip().split(";")
@@ -65,18 +63,17 @@ def obtener_recaudacion_funcion(codigo_funcion):
             recaudacion_funcion = 0
         return recaudacion_funcion
 
-
 #4-recaudacion total de todas las funciones#
     #sumar el total de venta de entradas de todas las funciones y devolver la recaudacion total de todas las funciones#
 def obtener_recaudacion_total():
     recaudacion_total = 0
     # 1. Recorremos las carpetas y juntamos los datos usando tus funciones anteriores
-    listado_archivos = os.listdir()
+    listado_archivos = os.listdir("data/")
     for i in range(len(listado_archivos)):
         verificador = listado_archivos[i].split()
         if verificador[0] == "funcion":
             numero_funcion = verificador[1]
-            if os.path.exists(f"funcion {numero_funcion}/ventas.csv"):
+            if os.path.exists(f"data/funcion {numero_funcion}/ventas.csv"):
                 recaudacion_total += obtener_recaudacion_funcion(numero_funcion)
     return round(recaudacion_total,2)
 
@@ -85,12 +82,12 @@ def obtener_recaudacion_total():
 def obtener_funciones_por_demanda():
     lista_demanda = []
     # 1. Recorremos las carpetas y juntamos los datos usando tus funciones anteriores
-    listado_archivos = os.listdir()
+    listado_archivos = os.listdir("data/")
     for i in range(len(listado_archivos)):
         verificador = listado_archivos[i].split()
         if verificador[0] == "funcion":
             numero_funcion = verificador[1]
-            if os.path.exists(f"funcion {numero_funcion}/ubicaciones.csv"): # O el archivo de ventas
+            if os.path.exists(f"data/funcion {numero_funcion}/ubicaciones.csv"): # O el archivo de ventas
                 cantidad = obtener_cantidad_entradas_vendidas(numero_funcion)
                 lista_demanda.append([numero_funcion, cantidad])     
     # 2. Aplicamos el método de Selección para ordenar de MAYOR a MENOR demanda

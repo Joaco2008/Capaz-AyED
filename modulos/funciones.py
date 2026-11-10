@@ -62,7 +62,7 @@ def cargar_fun(obra, hora_inicio, hora_fin, fecha, id_sala, precio):
     id = str(calcular_nuevo_id())
     # primero creamos las ubicaciones: si falla la plantilla, no se guarda la funcion a medias
     try:
-        asientos = crear_ubicaciones(f"funcion {id}")
+        asientos = crear_ubicaciones(f"data/funcion {id}")
     except FileNotFoundError:
         print("No se encontro data/plantilla.csv. No se pudo crear la funcion.")
         return None
@@ -161,7 +161,7 @@ def agregar_funcion():
     hora_inicio = input("Ingrese la hora de inicio de la funcion (hh:mm): ").strip()
     hora_fin = input("Ingrese la hora de fin de la funcion (hh:mm): ").strip()
     id_sala = input("Ingrese el ID de la sala: ").strip()
-    precio = input("Ingrese el precio de la entrada: ").strip().replace(",", ".")
+    precio = input("Ingrese el precio de la entrada: ").strip()
     if validar.validar_nombre(nombre) and validar.validar_precio(precio) and validar.es_funcion_valida(id_sala, fecha, hora_inicio, hora_fin):
         nuevo_id = cargar_fun(nombre, hora_inicio, hora_fin, fecha, id_sala, precio)
         if nuevo_id is not None:
