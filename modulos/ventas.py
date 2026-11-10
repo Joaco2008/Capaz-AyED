@@ -62,7 +62,7 @@ def gestionar_venta_entradas():
             print("No se han elegido asientos, se cancela la operacion")
             return
             
-        precio_base = float(funcion_encontrada[-2])
+        precio_base = float(funcion_encontrada[6].replace(".", ""))
         
         # BÚSQUEDA DE SOCIO POR DNI
         es_socio = False

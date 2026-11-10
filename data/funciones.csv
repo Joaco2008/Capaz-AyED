@@ -1,1 +1,3 @@
 id_funcion;dato_obra(nombre);hora_inicio;hora_fin;fecha;dato_sala(nro);precio;estado
+1;el gato con botas;20:30;22:30;11/11/2026;1;10.000;Programado
+2;la bella durmiente;15:00;17:00;11/11/2026;2;15.000;Programado
