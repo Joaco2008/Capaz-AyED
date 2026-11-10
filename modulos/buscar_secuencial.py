@@ -33,46 +33,39 @@ def busqueda_por_grupo_vectores(parametro, ruta,indice_registro):
     # Si recorrio todo el archivo y no lo encontro
     arch.close()
     return v_registros
-#funcion que verifica si un texto contiene otro texto, sin importar mayusculas o minusculas
+# Compara subcadenas caracter por caracter (sin distinguir mayusculas/minusculas)
+# Devuelve True si "buscado" aparece dentro de "texto_completo"
 def contiene_texto(texto_completo, buscado):
     texto = texto_completo.lower()
-    sub = buscado.lower()
-    
-    len_texto = len(texto)
-    len_sub = len(sub)
-    
-    # Si lo que buscamos es más largo que el texto original, no puede estar contenido
-    if len_sub > len_texto or len_sub == 0:
+    buscado = buscado.lower()
+    if len(buscado) > len(texto):
         return False
-
-    # Recorremos el texto principal posición por posición
-    for i in range(len_texto - len_sub + 1):
-        coincide = True
-        # Comparamos letra por letra con la subcadena buscada
-        for j in range(len_sub):
-            if texto[i + j] != sub[j]:
-                coincide = False
-                break
-        
-        # Si coincidieron todas las letras consecutivas, la encontramos
-        if coincide:
+    i = 0
+    while i <= len(texto) - len(buscado):
+        j = 0
+        # avanzamos mientras los caracteres coincidan
+        while j < len(buscado) and texto[i + j] == buscado[j]:
+            j += 1
+        # si coincidieron todos los caracteres de lo buscado, lo encontramos
+        if j == len(buscado):
             return True
-            
+        i += 1
     return False
-#funcion para buscar por nombre de obra
-def buscar_funciones_por_nombre(texto_buscado):
-    coincidencias = []
-    #leemos el archivo de funciones y buscamos las coincidencias
+
+# Busca por coincidencia parcial en el nombre de la obra (columna 1)
+# Retorna una lista con todos los registros (vectores) que coinciden
+def busqueda_por_nombre(texto_buscado, ruta):
+    v_registros = []
     try:
-        with open("data/funciones.csv", "r") as arch:
-            for linea in arch:
-                registro = linea.strip().split(";")
-                if len(registro) >= 8:
-                    nombre_obra = registro[1]
-                    
-                    # Llamamos a la función contiene_texto para verificar si el nombre de la obra contiene el texto buscado
-                    if contiene_texto(nombre_obra, texto_buscado):
-                        coincidencias.append(registro)
+        arch = open(ruta, "r")
     except FileNotFoundError:
-        print("El archivo 'data/funciones.csv' no existe.")
-        return []
+        return v_registros
+    arch.readline()  # saltamos la cabecera
+    linea = arch.readline()
+    while linea != "":
+        registro = linea.strip().split(";")
+        if len(registro) > 1 and contiene_texto(registro[1], texto_buscado):
+            v_registros.append(registro)
+        linea = arch.readline()
+    arch.close()
+    return v_registros

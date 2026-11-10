@@ -1,3 +1,1 @@
-id_funcion;dato_obra(nombre);hora_inicio;hora_fin;fecha;dato_sala(nro);cant_disponibles;precio;estado
-1;1;11:11;11:11;11/11/11;1;1111;Programado
-2;GAGA;11/11;11/11;11/11/11;1;1;Programado
+id_funcion;dato_obra(nombre);hora_inicio;hora_fin;fecha;dato_sala(nro);precio;estado

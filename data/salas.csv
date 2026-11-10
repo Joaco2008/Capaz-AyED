@@ -1,6 +1,6 @@
 id_sala;capacidad;nro_sala;estado_habilitacion;filas_platea;columnas_platea;filas_palco;columnas_palco
 1;600;1;habilitada
-2;600;2;inhabilitada
-3;600;3;inhabilitada
+2;600;2;habilitada
+3;600;3;habilitada
 4;600;4;habilitada
 5;600;5;habilitada

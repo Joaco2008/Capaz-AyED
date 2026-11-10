@@ -1,55 +1,7 @@
 from modulos.buscar_secuencial import busqueda_por_id
 import modulos.ubicaciones as ubi
+import modulos.busqueda_binaria as binaria
 import os
-def generar_matriz_estado(codigo_funcion, sector):
-    """
-    Función para generar la matriz de estado de los asientos de una función.
-    Requisito obligatorio de la cátedra: Implementar recorrido y consulta sobre matriz.
-    """
-    archivo_ubicaciones = open("ubicaciones_funcion.csv", "r", encoding="utf-8")
-    
-    # Dimensiones fijas según reglas de negocio SPN: 350 ubicaciones (platea) y 250 (palco).
-    if sector == "platea":
-        matriz=[[0]*10 for i in range(35)]
-    elif sector == "palco":
-        matriz=[[0]*10 for i in range(25)]    
-    archivo_ubicaciones.readline()
-    linea = archivo_ubicaciones.readline().split(";")
-    
-    # Lectura secuencial de archivo para cargar estado actual de la sala
-    while linea != [""]:
-        if linea[5]== codigo_funcion and linea[3]== sector:
-           butaca = int(linea[2])
-           estado_butaca = linea[4]
-           
-           # Conversión matemática de butaca lineal a coordenadas matriciales
-           fila = (butaca - 1) // 10
-           columna = (butaca - 1) % 10
-           matriz[fila][columna] = estado_butaca
-           
-        linea = archivo_ubicaciones.readline().split(";")
-    archivo_ubicaciones.close()
-    return matriz
-
-def validar_disponibilidad(matriz_estado, butacas_solicitadas):
-    """
-    RF3 Regla 3: Comprobar que todas las ubicaciones solicitadas estén disponibles.
-    Se consulta directamente la matriz mediante índices.
-    """
-    indice = 0
-    estan_disponibles = True
-    
-    # Ciclo while con variable bandera para frenar al encontrar un error sin usar 'break'
-    while indice < len(butacas_solicitadas) and estan_disponibles:
-        butaca = int(butacas_solicitadas[indice])
-        fila = (butaca - 1) // 10
-        columna = (butaca - 1) % 10
-        
-        if matriz_estado[fila][columna] == "ocupado":
-            estan_disponibles = False
-        indice += 1
-        
-    return estan_disponibles
 
 def calcular_importe(cant_entradas_platea,cant_entradas_palco, precio_base, es_socio):
     """
@@ -73,7 +25,13 @@ def gestionar_venta_entradas():
     print("--- REGISTRO DE VENTA DE ENTRADAS ---")
     codigo_funcion = input("Ingrese el código de la función para la venta de entradas: ")
         # RF3 Regla 1: Verificar que la función exista (mediante búsqueda manual secuencial)
-    funcion_encontrada = busqueda_por_id(codigo_funcion, "data/funciones.csv")    
+    archivo = open("data/funciones.csv","r")
+    registros = archivo.readlines()
+    try:
+        funcion_encontrada = binaria.busqueda_binaria_recursiva(registros,int(codigo_funcion),1,len(registros)-1)    
+    except ValueError:
+        print("Error, Caracteres invalidos para el codigo")
+        return False
     if funcion_encontrada == "No existe este dato":
         print("No se encontró la función con el código proporcionado.")
         return
@@ -132,7 +90,7 @@ def actualizar_estado_archivo(codigo_funcion, asientos):
                 butaca = str(linea[1])
                 # Recorre los asientos 
                 for e in range(len(asientos[0])):
-                    if butaca == asientos[1][e]:
+                    if butaca == asientos[0][e]:
                         linea[3] = "ocupado\n"
                         lineas[i] = ";".join(linea)
             elif linea[2] == "palco":
