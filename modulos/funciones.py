@@ -2,7 +2,7 @@ import os
 import modulos.buscar_secuencial as buscar
 import modulos.ordenamiento as ordenar
 import modulos.validar_funciones as validar
-
+import modulos.busqueda_binaria as binaria
 RUTA_FUNCIONES = "data/funciones.csv"
 RUTA_PLANTILLA = "data/plantilla.csv"
 CABECERA = "id;obra;hora_inicio;hora_fin;fecha;id_sala;precio;asientos_disponibles;estado\n"
@@ -103,8 +103,10 @@ def buscar_funciones():
     eleccion2 = validar.leer_opcion("Opcion: ", 0, 2)
     if eleccion2 == 1:
         id_buscar = input("Ingrese el ID de la funcion: ").strip()
-        # llamamos a la funcion de busqueda secuencial
-        resultado = buscar.busqueda_por_id(id_buscar, RUTA_FUNCIONES)
+        # llamamos a la funcion de busqueda binaria
+        with open(RUTA_FUNCIONES, "r") as arch:
+            registros_funciones = arch.readlines()
+            resultado = binaria.busqueda_binaria_recursiva(registros_funciones,int(id_buscar),1,len(registros_funciones)-1)
         # mostramos la funcion solo si existe, esta completa y no esta expirada
         if resultado != "No existe este dato" and len(resultado) >= 8 and resultado[7] != "Expirado":
             mostrar_funcion(resultado)

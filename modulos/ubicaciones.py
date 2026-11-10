@@ -1,4 +1,5 @@
 import modulos.buscar_secuencial as b_secuencial
+import modulos.ordenamiento as ord
 def mostrarubicaciones(datos_funcion):
     registros_plateas = b_secuencial.busqueda_por_grupo_vectores("platea",f"funcion {datos_funcion[0]}/ubicaciones.csv",2)
     registros_palcos = b_secuencial.busqueda_por_grupo_vectores("palco",f"funcion {datos_funcion[0]}/ubicaciones.csv",2)
@@ -51,11 +52,9 @@ def mostrarubicaciones(datos_funcion):
         cant_platea = int(input("Ingrese la cantidad de entradas para platea: "))
     cont_cant_platea = 0
     # Creamos las listas para almacenar nuestras entradas
-    platea_entradas = []
+    platea_entradas = [""] * cant_platea
     palco_entradas = []
-    posicion_lista_entradas = 0
     while cont_cant_platea < cant_platea:
-        # HACE FALTA QUE SEA SI O SI ENTERO?? (EVITAR EXCEPCIONES)
         try: 
             cod_ubi = int(input(f"Ingrese el codigo de la ubicacion nro {cont_cant_platea+1}:"))
             if cod_ubi > 0 and cod_ubi <= 350:
@@ -64,16 +63,8 @@ def mostrarubicaciones(datos_funcion):
                 else:
                     print(f"Ubicacion {registros_plateas[cod_ubi-1][0]} seleccionada")                            
                     registros_plateas[cod_ubi-1][3] = "ocupado\n"
-                    for i in range(len(platea_entradas)):
-                        if int(platea_entradas[i]) > cod_ubi:
-                            posicion_lista_entradas = i
-                            break
-                    else:
-                        # Si es mayor que todos, va al final
-                        posicion_lista_entradas = len(platea_entradas)
+                    platea_entradas[cont_cant_platea] = (str(cod_ubi))
                     cont_cant_platea += 1
-                    codigo_en_caracter = str(cod_ubi)
-                    platea_entradas.insert(posicion_lista_entradas, codigo_en_caracter)
             else:
                 print("Ubicacion Inexistente, porfavor seleccione una ubicacion valida")
         except ValueError:
@@ -83,10 +74,9 @@ def mostrarubicaciones(datos_funcion):
     while cant_palco > palcos_disponibles or cant_palco < 0:
         print("Error, Ingrese una cantidad mayor o igual 0 y menor a las ubicaciones disponibles")
         cant_palco = int(input("Ingrese la cantidad de entradas para palco: "))
+    palco_entradas = [""]*cant_palco
     cont_cant_palco = 0
-    posicion_lista_entradas = 0
     while cont_cant_palco < cant_palco:
-        # HACE FALTA QUE SEA SI O SI ENTERO?? (EVITAR EXCEPCIONES)
         try:
             cod_ubi = int(input(f"Ingrese el codigo de la ubicacion nro {cont_cant_palco+1}:"))
             if cod_ubi > 0 and cod_ubi <= 250:
@@ -95,19 +85,13 @@ def mostrarubicaciones(datos_funcion):
                 else:
                     print(f"Ubicacion {registros_palcos[cod_ubi-1][1]} seleccionada")
                     registros_palcos[cod_ubi-1][3] = "ocupado\n"
-                    for i in range(len(palco_entradas)):
-                        if int(palco_entradas[i]) > cod_ubi:
-                            posicion_lista_entradas = i
-                            break
-                    else:
-                        # Si es mayor que todos, va al final
-                        posicion_lista_entradas = len(palco_entradas)
-                    codigo_en_caracter = str(cod_ubi)
-                    palco_entradas.insert(posicion_lista_entradas, codigo_en_caracter)
+                    palco_entradas[cont_cant_palco] = (str(cod_ubi))
                     cont_cant_palco += 1
             else:
                 print("Ubicacion Inexistente, porfavor seleccione una ubicacion valida")
         except ValueError:
             print("No ingrese caracteres que no correspondan a los codigos de las ubicaciones")
-    asientos = [platea_entradas,palco_entradas]
-    return asientos
+    
+    enlaces_platea,inicio_platea = ord.obtener_enlaces(platea_entradas)
+    enlaces_palco,inicio_palco = ord.obtener_enlaces(palco_entradas)
+    return platea_entradas,enlaces_platea,inicio_platea,palco_entradas,enlaces_palco,inicio_palco

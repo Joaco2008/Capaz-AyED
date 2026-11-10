@@ -1,7 +1,23 @@
-from modulos.buscar_secuencial import busqueda_por_id
 import modulos.ubicaciones as ubi
 import modulos.busqueda_binaria as binaria
 import os
+
+def verificar_estado_socio(dni_ingresado):
+    """
+    Busca al socio por DNI en el archivo socios.csv y devuelve True si está activo.
+    """
+    with open("data/socios.csv", "r", encoding="utf-8") as archivo:
+        lineas = archivo.readlines()
+        for i in range(1,len(lineas)):
+            datos = lineas[i].strip().split(";")
+            if datos[1] == dni_ingresado:
+                if datos[2].lower() == "activo":
+                    return True
+                else:
+                    print("El socio adeuda cuotas. No se aplica el descuento del 30%.")
+                    return False
+        print("El DNI ingresado no está registrado como socio.")
+        return False
 
 def calcular_importe(cant_entradas_platea,cant_entradas_palco, precio_base, es_socio):
     """
@@ -37,29 +53,44 @@ def gestionar_venta_entradas():
         return
     else:
         print("Función encontrada:  ", funcion_encontrada)
-        asientos = ubi.mostrarubicaciones(funcion_encontrada)
-        if len(asientos[0]) == 0 and len(asientos[1]) == 0:
+        platea_entradas,enlaces_platea,inicio_platea,palco_entradas,enlaces_palco,inicio_palco = ubi.mostrarubicaciones(funcion_encontrada)
+        if len(platea_entradas) == 0 and len(palco_entradas) == 0:
             print("No se han elegido asientos, se cancela la operacion")
             return
         precio_base = float(funcion_encontrada[-2])
-        socio_input = input("¿Es socio? (s/n): ").lower()
-        es_socio = socio_input == "s"
-        total, descuento = calcular_importe(len(asientos[0]),len(asientos[1]),precio_base,es_socio)
+        es_socio = False
+        socio_input = input("¿El comprador es socio? (s/n): ").lower()
+        if socio_input == "s":
+            dni_socio = input("Ingrese el DNI del socio: ")
+            es_socio = verificar_estado_socio(dni_socio)
+        total, descuento = calcular_importe(len(platea_entradas),len(palco_entradas),precio_base,es_socio)
         # Muestra comprobante o ticket de la venta        
+        texto_platea = ""
+        texto_palco = ""
+        for i in range(len(enlaces_platea)):
+            if i == 0:
+                texto_platea += str(platea_entradas[inicio_platea]) + " "
+            else:
+                texto_platea += str(platea_entradas[enlaces_platea[i-1]]) + " "
+        for i in range(len(enlaces_palco)): 
+            if i == 0:
+                texto_palco += str(palco_entradas[inicio_palco]) + " "
+            else:
+                texto_palco += str(palco_entradas[enlaces_palco[i-1]]) + " "
         print(f"\n--- TICKET DE VENTA ---")
         print(f"Cod.Funcion: {funcion_encontrada[0]}")
         print(f"Obra: {funcion_encontrada[1]}")
-        print(f"Sector: Platea | Entradas: {len(asientos[0])} | Codigo/s: {" ".join(asientos[0])}")
-        print(f"Sector: Palcos | Entradas: {len(asientos[1])} | Codigo/s: {" ".join(asientos[1])}")
+        print(f"Sector: Platea | Entradas: {len(platea_entradas)} | Codigo/s: {texto_platea} ")
+        print(f"Sector: Palcos | Entradas: {len(palco_entradas)} | Codigo/s: {texto_palco}")
         print(f"Descuento socio: ${descuento}")
         print(f"TOTAL A PAGAR: ${total}")
         print("-----------------------")
         confirmacion = input("¿Desea confirmar y registrar la venta? (s/n): ")
         
         if confirmacion.lower() == 's':
-            actualizar_estado_archivo(codigo_funcion, asientos)
-            ubis_platea = ",".join(asientos[0])
-            ubis_palco = ",".join(asientos[1])
+            actualizar_estado_archivo(codigo_funcion, platea_entradas,enlaces_platea,inicio_platea,palco_entradas,enlaces_palco,inicio_palco)
+            ubis_platea = texto_platea.strip()
+            ubis_palco = texto_palco.strip()
             # Buscando el ultimo indice de compra - Para autoincrementar
             if os.path.exists(f"funcion {codigo_funcion}/ventas.csv"):
                 arch = open(f"funcion {codigo_funcion}/ventas.csv","r+")
@@ -69,14 +100,14 @@ def gestionar_venta_entradas():
                 arch.close()
             else:
                 id = 1
-            registrar_venta_archivo(id, codigo_funcion,ubis_platea,ubis_palco,len(asientos[0]),len(asientos[1]),descuento,total)
+            registrar_venta_archivo(id, codigo_funcion,ubis_platea,ubis_palco,len(platea_entradas),len(palco_entradas),descuento,total)
             print("Venta registrada exitosamente.")
         else:
             print("Venta cancelada por el usuario.")
         # else:
         #     print("No se puede realizar la venta, las butacas solicitadas no están disponibles.")
 
-def actualizar_estado_archivo(codigo_funcion, asientos):
+def actualizar_estado_archivo(codigo_funcion, platea_entradas,enlaces_platea,inicio_platea,palco_entradas,enlaces_palco,inicio_palco):
     """
     RF3 Regla 7: Actualizar la disponibilidad solamente cuando la venta haya sido validada.
     """
@@ -89,16 +120,26 @@ def actualizar_estado_archivo(codigo_funcion, asientos):
             if linea[2] == "platea":    
                 butaca = str(linea[1])
                 # Recorre los asientos 
-                for e in range(len(asientos[0])):
-                    if butaca == asientos[0][e]:
-                        linea[3] = "ocupado\n"
-                        lineas[i] = ";".join(linea)
+                for e in range(len(enlaces_platea)):
+                    if e == 0:
+                        if butaca == platea_entradas[inicio_platea]:
+                            linea[3] = "ocupado\n"
+                            lineas[i] = ";".join(linea)                        
+                    else:
+                        if butaca == platea_entradas[enlaces_platea[e-1]]:
+                            linea[3] = "ocupado\n"
+                            lineas[i] = ";".join(linea)
             elif linea[2] == "palco":
                 butaca = str(linea[1])
-                for e in range(len(asientos[1])):
-                    if butaca == asientos[1][e]:
-                        linea[3] = "ocupado\n"
-                        lineas[i] = ";".join(linea)
+                for e in range(len(enlaces_palco)):
+                    if e == 0:
+                        if butaca == palco_entradas[inicio_palco]:
+                            linea[3] = "ocupado\n"
+                            lineas[i] = ";".join(linea)                        
+                    else:
+                        if butaca == palco_entradas[enlaces_palco[e-1]]:
+                            linea[3] = "ocupado\n"
+                            lineas[i] = ";".join(linea)
     with open(f"funcion {codigo_funcion}/ubicaciones.csv", "w", encoding="utf-8") as archivo:
         archivo.writelines(lineas)
 def registrar_venta_archivo(numero_venta, codigo_funcion, ubis_platea,ubis_palcos, cant_entradas_platea, cant_entradas_palco, descuento, total):

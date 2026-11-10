@@ -1,16 +1,17 @@
 # Metodo de ordenamiento por seleccion, True = Ordenar ascendentemente, False = Ordenar Desendentemente
 def seleccion(vector, forma):
+    copia_vector = vector.copy()
     if forma:
-        for i in range(len(vector)):
-            mas_chico = vector[i]
+        for i in range(len(copia_vector)):
+            mas_chico = copia_vector[i]
             indice_mas_chico = i
-            for e in range(i, len(vector)):
-                if mas_chico > vector[e]:
-                    mas_chico = vector[e]
+            for e in range(i, len(copia_vector)):
+                if mas_chico > copia_vector[e]:
+                    mas_chico = copia_vector[e]
                     indice_mas_chico = e
-            aux = vector[i]
-            vector[i] = mas_chico
-            vector[indice_mas_chico] = aux
+            aux = copia_vector[i]
+            copia_vector[i] = mas_chico
+            copia_vector[indice_mas_chico] = aux
     else:
         for i in range(len(vector)):
             mas_grande = vector[i]
@@ -22,7 +23,27 @@ def seleccion(vector, forma):
             aux = vector[i]
             vector[i] = mas_grande
             vector[indice_mas_grande] = aux
-    return vector
+    return copia_vector
+
+# Metodo de ordenamiento por seleccion, True = Ordenar ascendentemente, False = Ordenar Desendentemente
+def obtener_enlaces(vector):
+    if len(vector) == 0:
+        return [], 0
+    vector_original = vector.copy()
+    vector_ordenado = seleccion(vector,True)
+    enlace = [int()]*len(vector)
+    indice_enlace = 0
+    inicio = 0
+    for i in range(len(vector)):
+        for e in range(len(vector)):
+            if vector_ordenado[i] == vector_original[e]:
+                if i == 0:
+                    inicio = e
+                else:
+                    enlace[indice_enlace] = e
+                    indice_enlace += 1
+    enlace[-1] = -1 
+    return enlace,inicio
 
 # Metodo de ordenamiento Burbuja (no recomendable para medianas o grandes volumnes de datos), True = ASC y False = DESC
 def burbuja(vector, forma):
