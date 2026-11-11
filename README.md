@@ -16,20 +16,22 @@ teatro_capaz/
 │
 ├── data/                       # Archivos de persistencia (.csv)
 │   ├── funciones.csv           # Registro de funciones en cartelera
-│   ├── ventas.csv              # Registro persistente de ventas realizadas (RF3)
-│   ├── obras.csv               # Soporte de obras teatrales y espectáculos
 │   ├── salas.csv               # Soporte de configuración de salas
 │   ├── socios.csv              # Soporte para validación de elegibilidad de descuentos
-│   ├── ubicaciones.csv
-│   ├── tipo_ubicacion.csv
+│   ├── plantilla.csv           # referencia para copiar y pegar la estructura de las ubicaciones en la creacion de cada funcion
+├───├── funcion n/
+├       ├── ubicaciones.csv
+├       ├── ventas.csv          # Registro persistente de ventas realizadas (RF3)
 ├── modulos/                    # Lógica interna y algoritmos
 │   ├── __init__.py
 │   ├── funciones.py            # Registro, consulta y búsqueda de funciones (RF1)
 │   ├── ubicaciones.py          # Gestión de matriz de plateas y palcos (RF2)
 │   ├── ventas.py               # Registro de transacciones y cálculo de importes (RF3)
 │   ├── reportes.py             # Generación de informes y estadísticas (RF4)
-│
-│
+│   ├── ordenamiento.py         # Funciones auxiliares para ordenar los elementos (ya sea por nombre, id, incluso obtener punteros en lista enlazada, se usa de preferencia el metodo por seleccion)
+│   ├── busqueda_binaria.py     # Funcion recursiva auxiliar que busca un elemento especifico (siempre se aplica en id's)
+│   ├── validar_funciones.py    # Funciones auxiliares para verificar que los parametros de la funcion sean correctos o que existan los indices indicados
+│   ├── buscar_secuencial.py    # Funciones auxiliares para buscar de manera secuencial un solo registro o varios
 │
 ├── main.py                     # Menú interactivo de consola y orquestador principal
 └── README.md                   # Documentación del proyecto

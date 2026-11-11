@@ -25,7 +25,6 @@ def seleccion(vector, forma):
             vector[indice_mas_grande] = aux
     return copia_vector
 
-# Metodo de ordenamiento por seleccion, True = Ordenar ascendentemente, False = Ordenar Desendentemente
 def obtener_enlaces(vector):
     if len(vector) == 0:
         return [], 0
@@ -44,24 +43,6 @@ def obtener_enlaces(vector):
                     indice_enlace += 1
     enlace[-1] = -1 
     return enlace,inicio
-
-# Metodo de ordenamiento Burbuja (no recomendable para medianas o grandes volumnes de datos), True = ASC y False = DESC
-def burbuja(vector, forma):
-    if forma:
-        for i in range(len(vector)):
-            for e in range(len(vector) - 1):
-                if vector[e] > vector[e + 1]:
-                    aux = vector[e]
-                    vector[e] = vector[e + 1]
-                    vector[e + 1] = aux
-    else:
-        for i in range(len(vector)):
-            for e in range(len(vector) - 1):
-                if vector[e] < vector[e + 1]:
-                    aux = vector[e]
-                    vector[e] = vector[e + 1]
-                    vector[e + 1] = aux
-    return vector
 
 # Carga en memoria solo las funciones "Programado" (omite cabecera, expiradas y registros incompletos)
 def cargar_funciones_programadas(ruta):
