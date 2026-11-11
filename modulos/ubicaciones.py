@@ -11,7 +11,7 @@ def mostrarubicaciones(datos_funcion):
         cant_platea = int(input("Ingrese la cantidad de entradas para platea: "))
     cont_cant_platea = 0
     # Creamos las listas para almacenar nuestras entradas
-    platea_entradas = [""] * cant_platea
+    platea_entradas = []
     palco_entradas = []
     while cont_cant_platea < cant_platea:
         try: 
@@ -22,7 +22,7 @@ def mostrarubicaciones(datos_funcion):
                 else:
                     print(f"Ubicacion {registros_plateas[cod_ubi-1][0]} seleccionada")                            
                     registros_plateas[cod_ubi-1][3] = "ocupado\n"
-                    platea_entradas[cont_cant_platea] = (str(cod_ubi))
+                    platea_entradas.append(cod_ubi)
                     cont_cant_platea += 1
                     plateas_disponibles,palcos_disponibles = mostrarmatriz(registros_plateas,registros_palcos)
             else:
@@ -34,7 +34,6 @@ def mostrarubicaciones(datos_funcion):
     while cant_palco > palcos_disponibles or cant_palco < 0:
         print("Error, Ingrese una cantidad mayor o igual 0 y menor a las ubicaciones disponibles")
         cant_palco = int(input("Ingrese la cantidad de entradas para palco: "))
-    palco_entradas = [""]*cant_palco
     cont_cant_palco = 0
     while cont_cant_palco < cant_palco:
         try:
@@ -45,7 +44,7 @@ def mostrarubicaciones(datos_funcion):
                 else:
                     print(f"Ubicacion {registros_palcos[cod_ubi-1][1]} seleccionada")
                     registros_palcos[cod_ubi-1][3] = "ocupado\n"
-                    palco_entradas[cont_cant_palco] = (str(cod_ubi))
+                    palco_entradas.append(cod_ubi)
                     cont_cant_palco += 1
                     plateas_disponibles,palcos_disponibles = mostrarmatriz(registros_plateas,registros_palcos)
             else:
@@ -55,6 +54,8 @@ def mostrarubicaciones(datos_funcion):
     
     enlaces_platea,inicio_platea = ord.obtener_enlaces(platea_entradas)
     enlaces_palco,inicio_palco = ord.obtener_enlaces(palco_entradas)
+    print(platea_entradas)
+    print(enlaces_platea)
     return platea_entradas,enlaces_platea,inicio_platea,palco_entradas,enlaces_palco,inicio_palco
 
 def mostrarmatriz(registros_plateas,registros_palcos):
